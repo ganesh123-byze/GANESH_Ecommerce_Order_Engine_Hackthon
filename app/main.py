@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api import products, carts, orders, misc
 from app.core.logging_middleware import LoggingMiddleware
 from app.core.exceptions import app_exception_handler, AppError
+import logging
 
 
 def create_app() -> FastAPI:
@@ -38,6 +39,13 @@ def create_app() -> FastAPI:
 
     # exception handlers
     app.add_exception_handler(AppError, app_exception_handler)
+
+    @app.on_event("startup")
+    async def _on_startup():
+        # Log and print a simple running message for visibility
+        logger = logging.getLogger("uvicorn.error")
+        logger.info("API is running and ready to accept requests")
+        print("API is running and ready to accept requests")
 
     return app
 
