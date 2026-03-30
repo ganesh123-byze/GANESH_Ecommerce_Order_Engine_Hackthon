@@ -16,7 +16,8 @@ def view_logs():
 @router.get("/inventory/low-stock")
 def low_stock(threshold: int = 5):
     svc = get_product_service()
-    return [p for p in svc.list() if p.quantity <= threshold]
+    # product service now exposes `list_products()` and `stock` on records
+    return [p for p in svc.list_products() if p.stock <= threshold]
 
 
 @router.post("/simulate/failure")
